@@ -79,6 +79,9 @@
 <input type="text" id="OverlayTextInput" />
 <button onclick="UpdateOverlay()">UPDATE OVERLAY</button>
 
+<button onclick="show()">SHOW OVERLAY</button>
+<button onclick="hide()">HIDE OVERLAY</button>
+
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
@@ -99,6 +102,10 @@
 
     var overlayText = '';
 
+    var timer = null;
+
+    var visible = false;
+
     function UpdateOverlay(){
         myFirebaseRef.child("BGS/OverlayText").set($('#OverlayTextInput').val());
 
@@ -107,6 +114,40 @@
     function ShowLogo(){
               $('#Overlay').hide();
               $('#LogoContainer').show();
+    };
+
+    function show(){
+        myFirebaseRef.child("BGS/Visibility").set(true);
+    };
+
+    function hide(){
+        myFirebaseRef.child("BGS/Visibility").set(false);
+    }
+
+    function hideOverlay(){
+        $('#Overlay').hide();
+        $('#LogoContainer').hide();
+        stopLoop();
+    };
+
+    function showOverlay(){
+        $('#Overlay').hide();
+        $('#LogoContainer').show();
+        startLoop();
+    };
+
+    function startLoop(){
+        timer = setInterval(function(){
+            console.log('Toggle Overlay');
+
+            if(overlayText)
+                $( ".Overlay" ).fadeToggle();
+        },5000);
+    };
+
+    function stopLoop(){
+        clearInterval(timer);
+        hideOverlay();
     };
 
     $(document).ready(function() {
@@ -126,16 +167,29 @@
             }
             else
             {
-                ShowLogo();
+                if(visible)
+                    ShowLogo();
             }
         });
 
-        setInterval(function(){
-            console.log('Toggle Overlay');
 
-            if(overlayText)
-                $( ".Overlay" ).fadeToggle();
-        },5000);
+        myFirebaseRef.child("BGS/Visibility").on("value", function(snapshot) {
+
+            visible = snapshot.val();
+
+            console.log('OVERLAY TEXT CHANGED', overlayText);
+
+            if(visible){
+                showOverlay();
+            }
+            else
+            {
+                hideOverlay();
+            }
+        });
+
+
+
 
 
     });
