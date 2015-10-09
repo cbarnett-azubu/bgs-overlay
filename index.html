@@ -115,29 +115,39 @@
     var visible = false;
 
     function UpdateOverlay(){
+
+      console.log('updateOverlay');
       myFirebaseRef.child("BGS/OverlayText").set($('#OverlayTextInput').val());
 
     };
 
     function ShowLogo(){
+
+      console.log('ShowLogo');
       $('#Overlay').hide();
       $('#LogoContainer').show();
     };
 
 
     function hideOverlay(){
+
+      console.log('hideOverlay');
       $('#Overlay').hide();
       $('#LogoContainer').hide();
       stopLoop();
     };
 
     function showOverlay(){
+
+      console.log('showOverlay');
       $('#Overlay').hide();
       $('#LogoContainer').show();
       startLoop();
     };
 
     function startLoop(){
+
+      console.log('startLoop');
       timer = setInterval(function(){
         console.log('Toggle Overlay');
 
@@ -147,8 +157,10 @@
     };
 
     function stopLoop(){
+
+      console.log('stopLoop');
       clearInterval(timer);
-      hideOverlay();
+
     };
 
     $(document).ready(function() {
