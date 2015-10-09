@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="xsplit:config-url" content="index_config.html" />
+
+    <title>BGS</title>
+    
+    <!--<link rel="stylesheet" href="css/style.css" />-->
+  </head>
+  <body>
+  <style>
+    /* Azubu Icon Roll-Out / Roll-in Prediction Button */
+
+    .azubu-icon {
+      margin: -3px 10px 0 -4px;
+      width: 55px;
+      height: 55px;
+      background: url(http://players.brightcove.net/3361910549001/videojs-azubu-lol-worlds-overlay/src/assets/img/Azubu-icon-55px.svg) no-repeat;
+      float: left;
+    }
+
+
+    .azubu-icon-button {
+      top: 300px;
+      min-width: 300px;
+      height: 49px;
+      border-radius: 33px 0 0 33px;
+      font-weight: bold;
+      background: rgba(0,0,0,0.7);
+      box-shadow: -5px 5px 15px rgba(0,0,0,0.8);
+      border: 2px solid rgba(0,0,0,0.9);
+      position: relative;
+      transition: transform 2s ease-in-out;
+    }
+
+    .azubu-icon-button:before {
+      content: " ";
+      position: absolute;
+      z-index: -1;
+      top: 1px;
+      left: 1px;
+      right: 1px;
+      bottom: 1px;
+      border: 1px solid rgba(0,162,224,0.4);
+      border-radius: 33px 0 0 33px;
+    }
+
+
+    .button-msg {
+      margin: 0 0 0 10px;
+      padding: 1px 0 0 0px;
+      color: #ffffff;
+      text-transform: uppercase;
+      font-family: "Exo 2", sans-serif;
+      font-size: 19px;
+      text-shadow: 1px 1px 2px #000000;
+    }
+
+
+  </style>
+    <div id="LogoContainer" style="background-color:black; position:absolute;top:0;left:0;"  class="Overlay">
+      <img src="file://C:/BGS/img/azubu-beta.png">
+    </div>
+
+    <div class="azubu-icon-button Overlay" style="display:none;position:absolute;top:0;left:0;">
+      <div class="azubu-icon"></div>
+      <div class="button-msg">
+        <div id="OverlayText"  class="">This is a Sample Text</div>
+      </div>
+    </div>
+
+
+
+    <script src="http://192.168.154.131:9001/bower_components/xjs-framework/dist/xjs.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://cdn.firebase.com/js/client/2.3.1/firebase.js"></script>
+  <script>
+
+
+    (function() {
+      'use strict';
+
+      /**
+       * Hi! Thanks for using XSplit JS Framework :)
+       *
+       * XSplit JS Framework exposes useful methods to work with XSplit without
+       * fiddling too much with the raw core methods exposed to JavaScript, which
+       * makes developing plugins for XSplit a lot easier.
+       *
+       * To get started, you just have to require our library:
+       * var xjs = require('xjs');
+       *
+       * You can read more about it at our documentation:
+       * http://xjsframework.github.io/quickstart.html
+       * http://xjsframework.github.io/tutorials.html
+       * http://xjsframework.github.io/api.html
+       */
+      var xjs = require('xjs');
+
+      xjs.ready().then(function() {
+        // Write your code here
+      });
+    })();
+
+
+    $(document).ready(function() {
+
+      var myFirebaseRef = new Firebase("https://sizzling-heat-9848.firebaseio.com");
+
+      console.log('Firebase Ref', myFirebaseRef);
+
+      myFirebaseRef.child("BGS/OverlayText").on("value", function(snapshot) {
+
+        var val = snapshot.val();
+
+        console.log('OVERLAY TEXT CHANGED', val);
+
+        if(val){
+          $('#OverlayText').text(val);
+        }
+      });
+
+      setInterval(function(){
+        console.log('Toggle Overlay');
+        $( ".Overlay" ).fadeToggle();
+      },5000);
+
+
+    });
+  </script>
+  </body>
+</html>
