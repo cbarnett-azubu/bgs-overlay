@@ -59,16 +59,17 @@
 
 
   </style>
-    <div id="LogoContainer" style="background-color:black; position:absolute;top:0;left:0;"  class="Overlay">
-      <img src="img/azubu-beta.png">
-    </div>
+  <div id="LogoContainer" style="background-color:black; position:absolute;top:0;left:0;"  class="Overlay">
+    <img src="img/azubu-beta.png">
+  </div>
 
-    <div class="azubu-icon-button Overlay" style="display:none;position:absolute;top:0;left:0;">
-      <div class="azubu-icon"></div>
-      <div class="button-msg">
-        <div id="OverlayText"  class="">This is a Sample Text</div>
-      </div>
+  <div class="azubu-icon-button Overlay" id="Overlay" style="display:none;position:absolute;top:0;left:0;">
+    <div class="azubu-icon"></div>
+    <div class="button-msg">
+      <div id="OverlayText" >This is a Sample Text</div>
     </div>
+  </div>
+
 
 
 
@@ -105,26 +106,42 @@
     })();
 
 
+    var myFirebaseRef = null;
+
+    var overlayText = '';
+    
+
+    function ShowLogo(){
+      $('#Overlay').hide();
+      $('#LogoContainer').show();
+    };
+
     $(document).ready(function() {
 
-      var myFirebaseRef = new Firebase("https://sizzling-heat-9848.firebaseio.com");
+      myFirebaseRef = new Firebase("https://sizzling-heat-9848.firebaseio.com");
 
       console.log('Firebase Ref', myFirebaseRef);
 
       myFirebaseRef.child("BGS/OverlayText").on("value", function(snapshot) {
 
-        var val = snapshot.val();
+        overlayText = snapshot.val();
 
-        console.log('OVERLAY TEXT CHANGED', val);
+        console.log('OVERLAY TEXT CHANGED', overlayText);
 
-        if(val){
-          $('#OverlayText').text(val);
+        if(overlayText){
+          $('#OverlayText').text(overlayText);
+        }
+        else
+        {
+          ShowLogo();
         }
       });
 
       setInterval(function(){
         console.log('Toggle Overlay');
-        $( ".Overlay" ).fadeToggle();
+
+        if(overlayText)
+          $( ".Overlay" ).fadeToggle();
       },5000);
 
 
